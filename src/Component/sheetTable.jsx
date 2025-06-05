@@ -41,7 +41,7 @@ function SheetTable() {
         // 1) Extract header row (first array element)
         const headerRow = data.values[0]; // e.g. ['Name', 'Score', 'Date', ...]
         // 2) Find index of "Score" column
-        const scoreIdx = headerRow.findIndex((h) => h === 'Score');
+          const scoreIdx = headerRow.findIndex((h) => h === 'score');
         if (scoreIdx === -1) {
           throw new Error('Column "Score" not found in header');
         }
@@ -111,7 +111,7 @@ function SheetTable() {
     <Layout style={{ minHeight: '100vh' }}>
       <Header style={{ background: '#001529', padding: '0 1rem' }}>
         <Title level={3} style={{ color: '#fff', margin: 0 }}>
-          Google Sheet → Ant Design Table
+                  SuperTux Scoreboard
         </Title>
       </Header>
 
