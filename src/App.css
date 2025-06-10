@@ -22,19 +22,76 @@
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
+  line-height: 2.333333;
+}
+
+h3:where(.css-dev-only-do-not-override-mc1tut).ant-typography, div:where(.css-dev-only-do-not-override-mc1tut).ant-typography-h3, div:where(.css-dev-only-do-not-override-mc1tut).ant-typography-h3>textarea, :where(.css-dev-only-do-not-override-mc1tut).ant-typography h3 {
+  margin-bottom: 0.5em;
+  color: rgba(0, 0, 0, 0.88);
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 2.3333333333333333;
 }
 
 .App-link {
   color: #61dafb;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+
+/* Table Header */
+.scoreboard-table .ant-table-thead > tr > th,
+.scoreboard-table .ant-table-thead > tr > th.ant-table-column-has-sorters,
+.scoreboard-table .ant-table-thead > tr > th.ant-table-column-sort {
+  background: #34495e !important;
+  color: #fff !important;
+  font-weight: 600;
+  font-size: 1.1em;
+  text-align: center;
+  letter-spacing: 0.5px;
+  border: 1px solid #d5d8dc !important;
 }
+
+/* Table Body Rows */
+.scoreboard-table .ant-table-tbody > tr:nth-child(even) > td {
+  background: #f7f9fa !important;
+  text-align: center;
+}
+.scoreboard-table .ant-table-tbody > tr:nth-child(odd) > td {
+  background: #eaeef2 !important;
+  text-align: center;
+}
+
+/* Top Score Row (use rowClassName to set this) */
+.top-score-row td {
+  background: #d4efdf !important; /* pale green, subtle */
+  font-weight: bold;
+  color: #1b2631 !important;
+}
+
+/* Optional: Rounded corners for the whole table */
+.scoreboard-table .ant-table {
+  border-radius: 14px !important;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(44, 62, 80, 0.08);
+}
+
+/* Optional: Table Borders */
+.scoreboard-table .ant-table-cell {
+  border: 1px solid #d5d8dc !important;
+}
+
+/* Sort Arrow styling */
+.scoreboard-table .ant-table-column-sorter-up svg,
+.scoreboard-table .ant-table-column-sorter-down svg {
+  width: 1.3em;
+  height: 1.3em;
+  color: #f4d03f; /* soft gold */
+}
+
+.scoreboard-table .ant-table-column-sorter-up.active svg,
+.scoreboard-table .ant-table-column-sorter-down.active svg {
+  color: #27ae60; /* green for active sort */
+}
+
 
 
