@@ -1,16 +1,16 @@
 {
   "files": {
-    "main.css": "/GoogleSheetTable/static/css/main.f3dae81b.css",
-    "main.js": "/GoogleSheetTable/static/js/main.1eed3b13.js",
+    "main.css": "/GoogleSheetTable/static/css/main.b85a4b41.css",
+    "main.js": "/GoogleSheetTable/static/js/main.be74cd82.js",
     "static/js/453.8f63cffc.chunk.js": "/GoogleSheetTable/static/js/453.8f63cffc.chunk.js",
     "static/media/logo.svg": "/GoogleSheetTable/static/media/logo.6ce24c58023cc2f8fd88fe9d219db6c6.svg",
     "index.html": "/GoogleSheetTable/index.html",
-    "main.f3dae81b.css.map": "/GoogleSheetTable/static/css/main.f3dae81b.css.map",
-    "main.1eed3b13.js.map": "/GoogleSheetTable/static/js/main.1eed3b13.js.map",
+    "main.b85a4b41.css.map": "/GoogleSheetTable/static/css/main.b85a4b41.css.map",
+    "main.be74cd82.js.map": "/GoogleSheetTable/static/js/main.be74cd82.js.map",
     "453.8f63cffc.chunk.js.map": "/GoogleSheetTable/static/js/453.8f63cffc.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.f3dae81b.css",
-    "static/js/main.1eed3b13.js"
+    "static/css/main.b85a4b41.css",
+    "static/js/main.be74cd82.js"
   ]
 }
