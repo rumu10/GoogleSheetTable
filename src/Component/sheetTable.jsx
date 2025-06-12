@@ -53,6 +53,10 @@ function SheetTable() {
 
                 // 1) Extract header row (first array element)
                 const headerRow = data.values[0]; // e.g. ['Name', 'Score', 'Date', ...]
+                // Choose only the columns you want to show
+const nameIdx = headerRow.findIndex((h) => h === 'name');
+const dateIdx = headerRow.findIndex((h) => h === 'date');
+
                 // 2) Find index of "Score" column
                 const scoreIdx = headerRow.findIndex((h) => h === 'score');
                 if (scoreIdx === -1) {
@@ -73,40 +77,44 @@ function SheetTable() {
                 parsed.sort((a, b) => b.score - a.score);
 
                 // 5) Build antd columns based on headerRow
-                const cols = headerRow.map((colName, colIndex) => ({
-                    // Use mapped name if it exists, otherwise fallback to Google Sheets name
-                    title: columnDisplayNames[colName] || colName,
-                    dataIndex: `col_${colIndex}`,
-                    key: `col_${colIndex}`,
-                    sorter: (a, b) => {
-                        if (colIndex === scoreIdx) {
-                            return a[`col_${colIndex}`] - b[`col_${colIndex}`];
-                        }
-                        const valA = a[`col_${colIndex}`] ?? '';
-                        const valB = b[`col_${colIndex}`] ?? '';
-                        return String(valA).localeCompare(String(valB));
+                const cols = [
+                    {
+                        title: columnDisplayNames['date'],
+                        dataIndex: `col_${dateIdx}`,
+                        key: `col_${dateIdx}`,
+                        sorter: (a, b) => String(a[`col_${dateIdx}`]).localeCompare(String(b[`col_${dateIdx}`])),
+                        sortDirections: ['descend', 'ascend'],
                     },
-                    sortDirections: ['descend', 'ascend'],
-                }));
+                    {
+                        title: columnDisplayNames['name'],
+                        dataIndex: `col_${nameIdx}`,
+                        key: `col_${nameIdx}`,
+                        sorter: (a, b) => String(a[`col_${nameIdx}`]).localeCompare(String(b[`col_${nameIdx}`])),
+                        sortDirections: ['descend', 'ascend'],
+                    },
+                    {
+                        title: columnDisplayNames['score'],
+                        dataIndex: `col_${scoreIdx}`,
+                        key: `col_${scoreIdx}`,
+                        sorter: (a, b) => a[`col_${scoreIdx}`] - b[`col_${scoreIdx}`],
+                        sortDirections: ['descend', 'ascend'],
+                    }
+                ];
+                
 
 
                 // 6) Build dataSource array: each object has keys col_0, col_1, etc.
                 const rowsData = parsed.map((obj, rowIndex) => {
                     const cells = obj._raw; // array of strings
-                    const rowObj = { key: rowIndex }; // antd Table requires a unique key
-                    // Map each cell to col_i
-                    headerRow.forEach((_, colIndex) => {
-                        let rawValue = cells[colIndex];
-                        // If this is the score column, store as number; else string
-                        if (colIndex === scoreIdx) {
-                            const n = parseFloat(rawValue ?? '0');
-                            rowObj[`col_${colIndex}`] = isNaN(n) ? 0 : n;
-                        } else {
-                            rowObj[`col_${colIndex}`] = rawValue ?? '';
-                        }
-                    });
+                    const rowObj = { key: rowIndex };
+                
+                    // Only add the selected columns
+                    rowObj[`col_${nameIdx}`] = cells[nameIdx] ?? '';
+                    rowObj[`col_${scoreIdx}`] = parseFloat(cells[scoreIdx] ?? '0');
+                    rowObj[`col_${dateIdx}`] = cells[dateIdx] ?? '';
                     return rowObj;
                 });
+                
 
                 setColumns(cols);
                 setDataSource(rowsData);
@@ -122,7 +130,6 @@ function SheetTable() {
 
     const scoreColumnKey = 'score'; // Use the actual key for your "score" column
     const maxScore = dataSource.length > 0 ? Math.max(...dataSource.map(row => row[scoreColumnKey])) : null;
-    console.log(maxScore);
 
     // Identify which column index is the "name" (gamer tag) column
     const nameColIndex = columns.findIndex(col => col.title === "Gamer Tag");
@@ -136,9 +143,21 @@ function SheetTable() {
     return (
         <Layout style={{ minHeight: '100vh' }}>
             <Header style={{ background: '#001529', padding: '0 1rem' }}>
-                <Title level={3} style={{ color: '#fff', margin: 0 }}>
+                <Title
+                    level={3}
+                    style={{
+                        color: '#fff',
+                        margin: 0,
+                        textAlign: 'center',
+                        lineHeight: '64px', // or your Header height for vertical centering
+                        fontSize: 25,
+                        fontWeight: 700,
+                        letterSpacing: 1,
+                    }}
+                >
                     SuperTux Scoreboard
                 </Title>
+
             </Header>
 
             <Content style={{ padding: '1rem', background: '#f0f2f5' }}>

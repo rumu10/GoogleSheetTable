@@ -25,14 +25,6 @@
   line-height: 2.333333;
 }
 
-h3:where(.css-dev-only-do-not-override-mc1tut).ant-typography, div:where(.css-dev-only-do-not-override-mc1tut).ant-typography-h3, div:where(.css-dev-only-do-not-override-mc1tut).ant-typography-h3>textarea, :where(.css-dev-only-do-not-override-mc1tut).ant-typography h3 {
-  margin-bottom: 0.5em;
-  color: rgba(0, 0, 0, 0.88);
-  font-weight: 600;
-  font-size: 24px;
-  line-height: 2.3333333333333333;
-}
-
 .App-link {
   color: #61dafb;
 }
@@ -45,7 +37,7 @@ h3:where(.css-dev-only-do-not-override-mc1tut).ant-typography, div:where(.css-de
   background: aquamarine !important;
   color: black !important;
   font-weight: 600;
-  font-size: 1.1em;
+  font-size: 1.2em;
   text-align: center;
   letter-spacing: 0.5px;
   border: 1px solid #d5d8dc !important;
