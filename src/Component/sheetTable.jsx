@@ -2,6 +2,9 @@
 import React, { useState, useEffect } from 'react';
 import { Table, message, Layout, Typography } from 'antd';
 import 'antd/dist/reset.css';
+import { Input, Space } from 'antd';
+import { SearchOutlined } from '@ant-design/icons';
+
 
 const { Content, Header } = Layout;
 const { Title } = Typography;
@@ -21,14 +24,16 @@ function SheetTable() {
     const [columns, setColumns] = useState([]);   // antd column definitions
     const [dataSource, setDataSource] = useState([]); // row data array
     const [error, setError] = useState(null);
+    const [searchText, setSearchText] = useState('');
+
 
     const columnDisplayNames = {
         name: "Gamer Tag",
         score: "Score",
         date: "Date"
         // Add other columns as needed
-      };
-      
+    };
+
 
     useEffect(() => {
         // Build the Sheets API URL
@@ -74,16 +79,16 @@ function SheetTable() {
                     dataIndex: `col_${colIndex}`,
                     key: `col_${colIndex}`,
                     sorter: (a, b) => {
-                      if (colIndex === scoreIdx) {
-                        return a[`col_${colIndex}`] - b[`col_${colIndex}`];
-                      }
-                      const valA = a[`col_${colIndex}`] ?? '';
-                      const valB = b[`col_${colIndex}`] ?? '';
-                      return String(valA).localeCompare(String(valB));
+                        if (colIndex === scoreIdx) {
+                            return a[`col_${colIndex}`] - b[`col_${colIndex}`];
+                        }
+                        const valA = a[`col_${colIndex}`] ?? '';
+                        const valB = b[`col_${colIndex}`] ?? '';
+                        return String(valA).localeCompare(String(valB));
                     },
                     sortDirections: ['descend', 'ascend'],
-                  }));
-                  
+                }));
+
 
                 // 6) Build dataSource array: each object has keys col_0, col_1, etc.
                 const rowsData = parsed.map((obj, rowIndex) => {
@@ -103,8 +108,6 @@ function SheetTable() {
                     return rowObj;
                 });
 
-
-
                 setColumns(cols);
                 setDataSource(rowsData);
                 setLoading(false);
@@ -121,6 +124,15 @@ function SheetTable() {
     const maxScore = dataSource.length > 0 ? Math.max(...dataSource.map(row => row[scoreColumnKey])) : null;
     console.log(maxScore);
 
+    // Identify which column index is the "name" (gamer tag) column
+    const nameColIndex = columns.findIndex(col => col.title === "Gamer Tag");
+    // If not found, fallback to 0 (first column)
+    const gamerTagKey = nameColIndex !== -1 ? columns[nameColIndex].dataIndex : 'col_0';
+
+    const filteredData = dataSource.filter(row =>
+        row[gamerTagKey]?.toLowerCase().includes(searchText.toLowerCase())
+    );
+
     return (
         <Layout style={{ minHeight: '100vh' }}>
             <Header style={{ background: '#001529', padding: '0 1rem' }}>
@@ -136,11 +148,21 @@ function SheetTable() {
                     </div>
                 )}
 
+                <Space style={{ marginBottom: 16 }}>
+                    <Input
+                        placeholder="Search by Gamer Tag"
+                        prefix={<SearchOutlined />}
+                        value={searchText}
+                        onChange={e => setSearchText(e.target.value)}
+                        allowClear
+                        style={{ width: 500, height: 38, fontSize: 20 }}
+                    />
+                </Space>
 
 
                 <Table
                     columns={columns}
-                    dataSource={dataSource}
+                    dataSource={filteredData}
                     loading={loading}
                     pagination={{ pageSize: PAGE_SIZE }}
                     bordered
@@ -149,7 +171,7 @@ function SheetTable() {
                     className="scoreboard-table"
                     rowClassName={(record) => {
                         return record[scoreColumnKey] === maxScore ? 'top-score-row' : '';
-                      }}
+                    }}
                 />
 
             </Content>

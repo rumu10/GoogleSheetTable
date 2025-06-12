@@ -42,8 +42,8 @@ h3:where(.css-dev-only-do-not-override-mc1tut).ant-typography, div:where(.css-de
 .scoreboard-table .ant-table-thead > tr > th,
 .scoreboard-table .ant-table-thead > tr > th.ant-table-column-has-sorters,
 .scoreboard-table .ant-table-thead > tr > th.ant-table-column-sort {
-  background: #34495e !important;
-  color: #fff !important;
+  background: aquamarine !important;
+  color: black !important;
   font-weight: 600;
   font-size: 1.1em;
   text-align: center;
@@ -85,7 +85,7 @@ h3:where(.css-dev-only-do-not-override-mc1tut).ant-typography, div:where(.css-de
 .scoreboard-table .ant-table-column-sorter-down svg {
   width: 1.3em;
   height: 1.3em;
-  color: #f4d03f; /* soft gold */
+  color: blueviolet; /* soft gold */
 }
 
 .scoreboard-table .ant-table-column-sorter-up.active svg,
