@@ -17,7 +17,7 @@ const RANGE = "Sheet1!A1:Z";
 
 
 // Number of rows per page in the Table
-const PAGE_SIZE = 25;
+const PAGE_SIZE = 15;
 
 function SheetTable() {
     const [loading, setLoading] = useState(true);
@@ -25,6 +25,8 @@ function SheetTable() {
     const [dataSource, setDataSource] = useState([]); // row data array
     const [error, setError] = useState(null);
     const [searchText, setSearchText] = useState('');
+
+    const [maxScore, setMaxScore] = useState([]);
 
 
     const columnDisplayNames = {
@@ -54,8 +56,8 @@ function SheetTable() {
                 // 1) Extract header row (first array element)
                 const headerRow = data.values[0]; // e.g. ['Name', 'Score', 'Date', ...]
                 // Choose only the columns you want to show
-const nameIdx = headerRow.findIndex((h) => h === 'name');
-const dateIdx = headerRow.findIndex((h) => h === 'date');
+                const nameIdx = headerRow.findIndex((h) => h === 'name');
+                const dateIdx = headerRow.findIndex((h) => h === 'date');
 
                 // 2) Find index of "Score" column
                 const scoreIdx = headerRow.findIndex((h) => h === 'score');
@@ -76,8 +78,18 @@ const dateIdx = headerRow.findIndex((h) => h === 'date');
                 // 4) Sort descending by score
                 parsed.sort((a, b) => b.score - a.score);
 
+
                 // 5) Build antd columns based on headerRow
                 const cols = [
+                    {
+                        title: "Rank",
+                        dataIndex: "rank",
+                        key: "rank",
+                        align: "center",
+                        sorter: (a, b) => a.rank - b.rank,
+                        sortDirections: ['ascend', 'descend'],
+                        width: 80,
+                    },
                     {
                         title: columnDisplayNames['date'],
                         dataIndex: `col_${dateIdx}`,
@@ -100,25 +112,42 @@ const dateIdx = headerRow.findIndex((h) => h === 'date');
                         sortDirections: ['descend', 'ascend'],
                     }
                 ];
-                
+
 
 
                 // 6) Build dataSource array: each object has keys col_0, col_1, etc.
-                const rowsData = parsed.map((obj, rowIndex) => {
-                    const cells = obj._raw; // array of strings
-                    const rowObj = { key: rowIndex };
+                let lastScore = null;
+                let lastRank = 0;
                 
+                parsed.forEach((item, idx) => {
+                  if (item.score !== lastScore) {
+                    lastRank++;
+                    lastScore = item.score;
+                  }
+                  item.rank = lastRank;
+                });
+
+                const maxScore = parsed.length > 0 ? parsed[0].score : null;
+
+                
+                const rowsData = parsed.map((obj, rowIndex) => {
+                    const cells = obj._raw;
+                    const rowObj = { key: rowIndex };
                     // Only add the selected columns
                     rowObj[`col_${nameIdx}`] = cells[nameIdx] ?? '';
                     rowObj[`col_${scoreIdx}`] = parseFloat(cells[scoreIdx] ?? '0');
                     rowObj[`col_${dateIdx}`] = cells[dateIdx] ?? '';
+                    // Add rank
+                    rowObj.rank = obj.rank;
                     return rowObj;
                 });
-                
+               
+
 
                 setColumns(cols);
                 setDataSource(rowsData);
                 setLoading(false);
+                setMaxScore(maxScore);
             })
             .catch((err) => {
                 console.error(err);
@@ -128,9 +157,6 @@ const dateIdx = headerRow.findIndex((h) => h === 'date');
             });
     }, []);
 
-    const scoreColumnKey = 'score'; // Use the actual key for your "score" column
-    const maxScore = dataSource.length > 0 ? Math.max(...dataSource.map(row => row[scoreColumnKey])) : null;
-
     // Identify which column index is the "name" (gamer tag) column
     const nameColIndex = columns.findIndex(col => col.title === "Gamer Tag");
     // If not found, fallback to 0 (first column)
@@ -139,6 +165,11 @@ const dateIdx = headerRow.findIndex((h) => h === 'date');
     const filteredData = dataSource.filter(row =>
         row[gamerTagKey]?.toLowerCase().includes(searchText.toLowerCase())
     );
+
+    // In your render function (before return)
+const scoreCol = columns.find(col => col.title === columnDisplayNames['score']);
+const scoreKey = scoreCol ? scoreCol.dataIndex : null;
+
 
     return (
         <Layout style={{ minHeight: '100vh' }}>
@@ -188,9 +219,9 @@ const dateIdx = headerRow.findIndex((h) => h === 'date');
                     size="large"
                     scroll={{ x: 'max-content' }}
                     className="scoreboard-table"
-                    rowClassName={(record) => {
-                        return record[scoreColumnKey] === maxScore ? 'top-score-row' : '';
-                    }}
+                    rowClassName={record =>
+                        scoreKey && record[scoreKey] === maxScore ? 'top-score-row' : ''
+                      }
                 />
 
             </Content>

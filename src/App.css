@@ -54,11 +54,15 @@
 }
 
 /* Top Score Row (use rowClassName to set this) */
-.top-score-row td {
-  background: #d4efdf !important; /* pale green, subtle */
+/* This will color the full row, not just cells */
+.ant-table-tbody > tr.top-score-row,
+.ant-table-tbody > tr.top-score-row > td {
+  background: #3db06b !important;   /* Your chosen color */
   font-weight: bold;
-  color: #1b2631 !important;
+  color: #9815d1 !important;
+  font-size: medium;
 }
+
 
 /* Optional: Rounded corners for the whole table */
 .scoreboard-table .ant-table {
