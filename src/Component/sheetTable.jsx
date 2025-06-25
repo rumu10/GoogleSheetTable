@@ -76,7 +76,10 @@ function SheetTable() {
                 });
 
                 // 4) Sort descending by score
-                parsed.sort((a, b) => b.score - a.score);
+                parsed.sort((a, b) => {
+                    if (b.score !== a.score) return b.score - a.score;
+                    return b._raw[dateIdx].localeCompare(a._raw[dateIdx]);
+                  });
 
 
                 // 5) Build antd columns based on headerRow
@@ -89,6 +92,17 @@ function SheetTable() {
                         sorter: (a, b) => a.rank - b.rank,
                         sortDirections: ['ascend', 'descend'],
                         width: 80,
+                        className: "rank-column-cell",
+                        render: (text, record) => (
+                            <span>
+                              {text === 1 && (
+                                <span role="img" aria-label="trophy" style={{ marginRight: 4, fontSize: 24 }}>
+                                  🏆
+                                </span>
+                              )}
+                              {text}
+                            </span>
+                          ),
                     },
                     {
                         title: columnDisplayNames['date'],
@@ -118,18 +132,15 @@ function SheetTable() {
                 // 6) Build dataSource array: each object has keys col_0, col_1, etc.
                 let lastScore = null;
                 let lastRank = 0;
-                
+                let date = new Date().toISOString(); // Get today's date in YYYY-MM-DD format
+
                 parsed.forEach((item, idx) => {
-                  if (item.score !== lastScore) {
-                    lastRank++;
-                    lastScore = item.score;
-                  }
-                  item.rank = lastRank;
-                });
+                    item.rank = idx + 1;
+                  });
 
                 const maxScore = parsed.length > 0 ? parsed[0].score : null;
 
-                
+
                 const rowsData = parsed.map((obj, rowIndex) => {
                     const cells = obj._raw;
                     const rowObj = { key: rowIndex };
@@ -141,7 +152,7 @@ function SheetTable() {
                     rowObj.rank = obj.rank;
                     return rowObj;
                 });
-               
+
 
 
                 setColumns(cols);
@@ -167,21 +178,22 @@ function SheetTable() {
     );
 
     // In your render function (before return)
-const scoreCol = columns.find(col => col.title === columnDisplayNames['score']);
-const scoreKey = scoreCol ? scoreCol.dataIndex : null;
+    const scoreCol = columns.find(col => col.title === columnDisplayNames['score']);
+    const scoreKey = scoreCol ? scoreCol.dataIndex : null;
 
 
     return (
-        <Layout style={{ minHeight: '100vh' }}>
-            <Header style={{ background: '#001529', padding: '0 1rem' }}>
+        <Layout style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #0f2027 0%,rgb(67, 45, 64) 50%,rgb(32, 12, 133) 100%)' }}>
+            <Header style={{ background: 'transparent', padding: '0 0rem' }}>
                 <Title
-                    level={3}
+                    level={4}
                     style={{
                         color: '#fff',
+                        background: 'linear-gradient(135deg, #0f2027 0%,rgb(67, 45, 64) 50%,rgb(47, 41, 75) 100%)',
                         margin: 0,
                         textAlign: 'center',
-                        lineHeight: '64px', // or your Header height for vertical centering
-                        fontSize: 25,
+                        lineHeight: '84px', // or your Header height for vertical centering
+                        fontSize: 35,
                         fontWeight: 700,
                         letterSpacing: 1,
                     }}
@@ -191,14 +203,14 @@ const scoreKey = scoreCol ? scoreCol.dataIndex : null;
 
             </Header>
 
-            <Content style={{ padding: '1rem', background: '#f0f2f5' }}>
+            <Content style={{ padding: '5rem', background: 'transparent' }}>
                 {error && (
                     <div style={{ color: 'red', marginBottom: '1rem' }}>
                         Error: {error}
                     </div>
                 )}
-
-                <Space style={{ marginBottom: 16 }}>
+              
+                <Space style={{ marginBottom: 26 }}>
                     <Input
                         placeholder="Search by Gamer Tag"
                         prefix={<SearchOutlined />}
@@ -221,7 +233,7 @@ const scoreKey = scoreCol ? scoreCol.dataIndex : null;
                     className="scoreboard-table"
                     rowClassName={record =>
                         scoreKey && record[scoreKey] === maxScore ? 'top-score-row' : ''
-                      }
+                    }
                 />
 
             </Content>

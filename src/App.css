@@ -1,5 +1,6 @@
 .App {
   text-align: center;
+  
 }
 
 .App-logo {
@@ -29,51 +30,74 @@
   color: #61dafb;
 }
 
+/* For table body Rank cells */
+.scoreboard-table .rank-column-cell {
+  font-size: 1.8em !important;    /* Change to whatever size you want */
+  font-weight: bold;
+  color: #252525;
+  letter-spacing: 0.03em;
+}
+
+/* (Optional) For table header Rank cell */
+.scoreboard-table th.rank-column-cell {
+  font-size: 1.2em !important;
+}
+
+
 
 /* Table Header */
 .scoreboard-table .ant-table-thead > tr > th,
 .scoreboard-table .ant-table-thead > tr > th.ant-table-column-has-sorters,
 .scoreboard-table .ant-table-thead > tr > th.ant-table-column-sort {
-  background: aquamarine !important;
-  color: black !important;
-  font-weight: 600;
+  background: rgb(121, 3, 246) !important;
+  color: rgb(255, 255, 255) !important;
+  font-weight: bold;
   font-size: 1.2em;
   text-align: center;
   letter-spacing: 0.5px;
-  border: 1px solid #d5d8dc !important;
+  border: 0px solid #d5d8dc !important;
 }
 
 /* Table Body Rows */
 .scoreboard-table .ant-table-tbody > tr:nth-child(even) > td {
-  background: #f7f9fa !important;
+  background: #202223 !important;
   text-align: center;
+  border: 0px solid #d5d8dc !important;
+  color: rgb(255, 255, 255) !important;
+  font-weight: bold;
 }
 .scoreboard-table .ant-table-tbody > tr:nth-child(odd) > td {
-  background: #eaeef2 !important;
+  background: #4a5157 !important;
   text-align: center;
+  border: 0px solid #d5d8dc !important;
+  color: rgb(255, 255, 255) !important;
+  font-weight: bold;
 }
 
 /* Top Score Row (use rowClassName to set this) */
 /* This will color the full row, not just cells */
-.ant-table-tbody > tr.top-score-row,
-.ant-table-tbody > tr.top-score-row > td {
-  background: #3db06b !important;   /* Your chosen color */
+
+
+/* Highlight top-score-row, override even/odd backgrounds */
+.scoreboard-table .ant-table-tbody > tr.top-score-row > td {
+  /* background: #3db06b !important; */
   font-weight: bold;
-  color: #9815d1 !important;
-  font-size: medium;
+  /* color: #37aeb4 !important; */
+  font-size: large;
 }
+
 
 
 /* Optional: Rounded corners for the whole table */
 .scoreboard-table .ant-table {
   border-radius: 14px !important;
   overflow: hidden;
-  box-shadow: 0 4px 16px rgba(44, 62, 80, 0.08);
+  box-shadow: 0 4px 16px rgba(20, 20, 20, 0.08);
 }
 
 /* Optional: Table Borders */
 .scoreboard-table .ant-table-cell {
-  border: 1px solid #d5d8dc !important;
+  border: 0px solid #d5d8dc !important;
 }
 
 /* Sort Arrow styling */
@@ -81,12 +105,32 @@
 .scoreboard-table .ant-table-column-sorter-down svg {
   width: 1.3em;
   height: 1.3em;
-  color: blueviolet; /* soft gold */
+  color: rgb(2, 250, 35); /* soft gold */
 }
 
 .scoreboard-table .ant-table-column-sorter-up.active svg,
 .scoreboard-table .ant-table-column-sorter-down.active svg {
-  color: #27ae60; /* green for active sort */
+  color: #d4e3da; /* green for active sort */
+}
+
+/* Remove the outer table border */
+.scoreboard-table .ant-table,
+.scoreboard-table .ant-table-container,
+.scoreboard-table .ant-table-content table {
+  border: none !important;
+}
+
+/* Remove top border from table head */
+.scoreboard-table .ant-table-thead > tr > th:first-child {
+  border-left: none !important;
+}
+.scoreboard-table .ant-table-thead > tr > th {
+  border-top: none !important;
+}
+
+/* Remove left border from first column cells */
+.scoreboard-table .ant-table-tbody > tr > td:first-child {
+  border-left: none !important;
 }
 
 
